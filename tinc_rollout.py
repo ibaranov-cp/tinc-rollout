@@ -368,7 +368,7 @@ class NewVPN(TincRollout):
         d = {
             "tinc-up":"#!/bin/sh\nIP=%s\nifconfig $INTERFACE $IP netmask 255.255.255.0\n" % o.ip,
             "tinc-down":"#!/bin/sh\nVPN_NAME=%s\nifconfig $VPN_NAME down\n" % o.vpn_name,
-            "tinc.conf":"Name = %s\nAddressFamily = ipv4\nDevice = /dev/net/tun\nLocalDiscovery = yes\n" % o.hostname,
+            "tinc.conf":"Name = %s\nAddressFamily = ipv4\nDevice = /dev/net/tun\nLocalDiscovery = yes\nCompression = 1\n" % o.hostname,
             }
         if os.path.exists(filespec):
             contents = slurp_if_exists(filespec)
@@ -383,7 +383,7 @@ class NewVPN(TincRollout):
         fname = os.path.join(o.hosts_dir, o.hostname)
         if not os.path.exists(fname):
             with open(fname, 'w') as OUTF:
-                OUTF.write("Subnet = %s/32\n" % o.ip)
+                OUTF.write("Compression=1\nSubnet = %s/32\n" % o.ip)
 
     def create(o):
         o.add_nets_boot()
